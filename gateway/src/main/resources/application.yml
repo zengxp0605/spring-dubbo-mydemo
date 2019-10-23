@@ -1,0 +1,19 @@
+## 端口号
+#server:
+#  port: 8081
+
+## Dubbo 服务提供者配置
+dubbo:
+  application:
+    name: web-gateway-provider # 服务名
+  registry:
+    #address: zookeeper://127.0.0.1:2181 # 注册中心地址
+    address: 106.15.201.55:2181,106.15.201.55:2182,106.15.201.55:2183 # 注册中心地址
+    protocol: zookeeper
+  protocol:
+    name: dubbo # 指定通信协议
+    port: 20883 # 通信端口  这里指的是与消费者间的通信协议与端口
+  provider:
+    timeout: 10000 # 配置全局调用服务超时时间，dubbo默认是1s，肯定不够用呀
+    retries: 3 # 重试3次
+    delay: -1

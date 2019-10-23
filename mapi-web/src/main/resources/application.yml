@@ -1,0 +1,8 @@
+
+## Dubbo 服务消费者配置
+dubbo:
+  application:
+    name: mapi-web-consumer # 消息者名字
+  registry:
+#    address: zookeeper://127.0.0.1:2181 # 注册中心地址
+    address: zookeeper://106.15.201.55:2181?backup=106.15.201.55:2182,106.15.201.55:2183 # 注册中心地址

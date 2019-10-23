@@ -1,0 +1,6 @@
+dubbo:
+  registry:
+    protocol: zookeeper
+    address: 106.15.201.55:2181,106.15.201.55:2182,106.15.201.55:2183
+  application:
+    name: client-dubbo-comsumer
