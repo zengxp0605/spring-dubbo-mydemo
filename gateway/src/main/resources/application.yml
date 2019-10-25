@@ -17,3 +17,9 @@ dubbo:
     timeout: 10000 # 配置全局调用服务超时时间，dubbo默认是1s，肯定不够用呀
     retries: 3 # 重试3次
     delay: -1
+    version: 1.0.0
+  consumer:
+    version: 1.0.0
+    check: false
+    timeout: 5000
+    retries: 0

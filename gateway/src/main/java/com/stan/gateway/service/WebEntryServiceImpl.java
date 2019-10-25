@@ -7,12 +7,14 @@ import com.stan.dubbobaseinterface.entity.HandleDataModel;
 import com.stan.dubbobaseinterface.service.HelloService;
 import com.stan.dubbobaseinterface.service.SyncDataHandleService;
 import com.stan.dubbobaseinterface.service.WebEntryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Service(version = "1.0.0")
+// 这里不用注解实现的话, 需要在ExportServiceConfig 中配置
+//@Service(version = "1.0.0")
 @Component
 public class WebEntryServiceImpl implements WebEntryService {
 
@@ -20,24 +22,79 @@ public class WebEntryServiceImpl implements WebEntryService {
     @Reference(version = "1.0.0", group = "iotbmp-hello")
     HelloService helloService;
 
+    // 另外一种实现方式,配合配置@Bean
+//    @Autowired
+//    HelloService helloService;
+
+    // 普通调用入口
     public String entry(String groupName, String methodName, String paramId) {
         String time = TimeZone.getDefault().getDisplayName() + ": "
-                + new SimpleDateFormat("Y年M月d日H时m分s秒").format(System.currentTimeMillis());
+                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
 
-//        testIotBmpGroup();
+        testIotBmpGroup();
 //        return time;
 
-        Object obj = reportData(groupName, methodName, paramId);
+        // 普通调用
+        JSONObject result = reportData(groupName, methodName, paramId);
+        JSONObject obj = new JSONObject();
+        obj.put("result", result);
+        obj.put("class.fun", "WebEntryServiceImpl.entry");
+        obj.put("groupName", groupName);
+        obj.put("time", time);
 
-        return "[WebEntryServiceImpl.entry] groupName: " + groupName + " ,result object: " + obj + "<br/>" + time;
+        return JSONObject.toJSONString(obj);
+    }
+
+    // 泛化调用入口
+    public String entryGeneric(String groupName, String methodName, String paramId) {
+        String time = TimeZone.getDefault().getDisplayName() + ": "
+                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
+
+        // 泛化调用
+        Object result = genericReportData(groupName, methodName, paramId);
+
+        JSONObject obj = new JSONObject();
+        obj.put("result", result);
+        obj.put("class.fun", "WebEntryServiceImpl.entryGeneric");
+        obj.put("groupName", groupName);
+        obj.put("time", time);
+        obj.put("remark", "这个的泛化调用的结果");
+
+        return JSONObject.toJSONString(obj);
     }
 
     /**
+     * 普通调用
      * 通过 groupName 和 methodName 方法名调用不同dubbo服务的对应接口
      * @return
      */
-    private Object reportData(String groupName, String methodName, String paramId){
+    private JSONObject reportData(String groupName, String methodName, String paramId){
         System.out.println("[reportData]" + groupName + " || " + methodName + " || " + paramId);
+
+        DubboServiceFactory dubboServiceFactory = DubboServiceFactory.getInstance();
+        SyncDataHandleService syncDataHandleService = dubboServiceFactory.getInvokeService(groupName);
+        HandleDataModel handleDataModel = new HandleDataModel();
+
+        JSONObject data = new JSONObject();
+        data.put("id", paramId);
+        data.put("methodName", methodName);
+        data.put("detail", "{\"reportId\": \"124\", \"weight\": 61.5}");
+        handleDataModel.setData(data);
+        handleDataModel.setCmd(methodName);
+        JSONObject obj= syncDataHandleService.handleData(handleDataModel);
+
+        System.out.println("handleData result: " + obj);
+
+        return obj;
+    }
+
+    /**
+     * 泛化调用
+     * 通过 groupName 和 methodName 方法名调用不同dubbo服务的对应接口
+     * @return
+     */
+    private Object genericReportData(String groupName, String methodName, String paramId){
+        System.out.println("[genericReportData]" + groupName + " || " + methodName + " || " + paramId);
 
         DubboServiceFactory dubboServiceFactory = DubboServiceFactory.getInstance();
 

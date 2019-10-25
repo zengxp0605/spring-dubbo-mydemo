@@ -13,6 +13,7 @@ public class SyncDataHandleServiceImpl implements SyncDataHandleService {
     public JSONObject handleData(HandleDataModel hdm) {
         JSONObject obj = new JSONObject();
         obj.put("test", 23244);
+        obj.put("from-fun", "iotecg.handleData");
         System.out.println("[iotecg]-[handleData] obj:" + obj);
         return obj;
     }

@@ -25,9 +25,9 @@ public class DubboBaseConfig {
         return registryConfig;
     }
 
-    @Bean
-    public ApplicationConfig application(){
-        return new ApplicationConfig(appName);
-    }
+//    @Bean
+//    public ApplicationConfig application(){
+//        return new ApplicationConfig(appName);
+//    }
 
 }

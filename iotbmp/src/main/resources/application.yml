@@ -13,4 +13,8 @@ dubbo:
     retries: 3 # 重试3次
     delay: -1
     version: 1.0.0
-
+  consumer:
+    version: 1.0.0
+    check: false
+    timeout: 5000
+    retries: 0
