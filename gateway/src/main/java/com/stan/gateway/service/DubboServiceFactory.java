@@ -17,7 +17,7 @@ public class DubboServiceFactory {
 
     private String appName = "web-gateway-provider";
 
-    private  String dubboAddress = "106.15.201.55:2181";
+    private  String dubboAddress = "jasonzeng.top:2181";
 
     private static class SingletonHolder {
         private static DubboServiceFactory INTANCE = new DubboServiceFactory();

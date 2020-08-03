@@ -8,7 +8,7 @@ dubbo:
     name: web-gateway-provider # 服务名
   registry:
     #address: zookeeper://127.0.0.1:2181 # 注册中心地址
-    address: 106.15.201.55:2181,106.15.201.55:2182,106.15.201.55:2183 # 注册中心地址
+    address: jasonzeng.top:2181,jasonzeng.top:2182,jasonzeng.top:2183 # 注册中心地址
     protocol: zookeeper
   protocol:
     name: dubbo # 指定通信协议
